@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SmartWarehouse
+{
+    public class Category
+    {
+        public string Name { get; set; }
+        public Category ParentCategory { get; set; } 
+        public List<Category> SubCategories { get; set; } = new List<Category>();
+
+        public Category(string name, Category parent = null)
+        {
+            Name = name;
+            ParentCategory = parent;
+            if (parent != null) parent.SubCategories.Add(this);
+        }
+
+        public bool RemoveSubCategory(Category sub)
+        {
+            if (sub.SubCategories.Count == 0) // Видаляємо тільки якщо немає вкладених підкатегорій
+            {
+                return SubCategories.Remove(sub);
+            }
+            return false;
+        }
+
+        public override string ToString() // переопределяем публичный метод ToString который создан для отображения категории текстом
+        {
+            return Name; 
+        }
+        public List<Product> GetProducts(List<Product> allProducts)
+        {
+            // Шукаємо товари, у яких поле Category вказує саме на цю категорію
+            return allProducts.Where(p => p.Category == this).ToList();
+        }
+
+        // TODO: Интегрировать связь с классом Product
+        //public List<Product> GetProducts(List<Product> allProducts)
+        //{
+        //    return allProducts.Where(p => p.Category == this.Name).ToList();
+        //}
+    }
+}
