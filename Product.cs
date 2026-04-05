@@ -21,7 +21,7 @@ namespace SmartWarehouse
             Category = category;
         }
 
-        public string GetInfo() // метод создан для получения данных про товар
+        public string GetInfo() 
         {
             string categoryName = Category != null ? Category.Name : "Без категорії";
             return $"{Name} [{categoryName}] (Артикул: {Article}) - Ціна: {Price}, Кількість: {Quantity}";

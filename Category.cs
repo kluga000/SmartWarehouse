@@ -19,20 +19,19 @@ namespace SmartWarehouse
 
         public bool RemoveSubCategory(Category sub)
         {
-            if (sub.SubCategories.Count == 0) // Видаляємо тільки якщо немає вкладених підкатегорій
+            if (sub.SubCategories.Count == 0) 
             {
                 return SubCategories.Remove(sub);
             }
             return false;
         }
 
-        public override string ToString() // переопределяем публичный метод ToString который создан для отображения категории текстом
+        public override string ToString() 
         {
             return Name; 
         }
         public List<Product> GetProducts(List<Product> allProducts)
         {
-            // Шукаємо товари, у яких поле Category вказує саме на цю категорію
             return allProducts.Where(p => p.Category == this).ToList();
         }
 

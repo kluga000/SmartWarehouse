@@ -18,14 +18,14 @@ namespace SmartWarehouse
 
             Category tech = new Category("Електроніка");
             Category laptops = new Category("Ноутбуки", tech);
-            Category microwave = new Category("Мікрохвильова піч", tech);
+            Category microwaves = new Category("Мікрохвильовки", tech);
 
             CurrentUser = new Admin("admin_rari", "1234");
 
             Product testProduct = new Product(1, "Lenovo Legion", "LNV-01", 45000, 5, laptops);
             manager.UpsertProduct(testProduct);
             
-            manager.UpsertProduct(new Product(2, "Xiaomi MWB010-2A", "XAO-02", 3399, 25, microwave));
+            manager.UpsertProduct(new Product(2, "Xiaomi MWB010-2A", "XAO-02", 3399, 25, microwaves));
 
             manager.UpsertProduct(new Product(1, "Lenovo Legion", "LNV-01", 45000, 5, laptops));
 
