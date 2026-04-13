@@ -1,15 +1,17 @@
-﻿using System; 
+﻿using System;
 
-namespace SmartWarehouse 
+namespace SmartWarehouse
 {
-    public class Product  
+    public class Product
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Article { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
         public Category Category { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
 
         public Product(int id, string name, string article, double price, int quantity, Category category)
         {
@@ -21,10 +23,11 @@ namespace SmartWarehouse
             Category = category;
         }
 
-        public string GetInfo() 
+        public string GetInfo()
         {
-            string categoryName = Category != null ? Category.Name : "Без категорії";
-            return $"{Name} [{categoryName}] (Артикул: {Article}) - Ціна: {Price}, Кількість: {Quantity}";
+            string categoryName = Category != null ? Category.FullName : "Без категорії";
+            string status = IsDeleted ? " [АРХІВ]" : "";
+            return $"{Name}{status} [{categoryName}] (Артикул: {Article}) - Ціна: {Price}, Кількість: {Quantity}";
         }
 
         public void AddQuantity(int amount)

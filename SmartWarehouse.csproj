@@ -55,11 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddProductWindow.xaml.cs">
+      <DependentUpon>AddProductWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Admin.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="ProductRepository.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserRole.cs" />
     <Compile Include="WarehouseManager.cs" />
+    <Page Include="AddProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
