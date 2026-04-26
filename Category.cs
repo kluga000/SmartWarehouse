@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SmartWarehouse
 {
@@ -8,6 +9,8 @@ namespace SmartWarehouse
     {
         public string Name { get; set; }
         public Category ParentCategory { get; set; }
+
+        [JsonIgnore]
         public List<Category> SubCategories { get; set; } = new List<Category>();
 
         public string FullName
@@ -19,6 +22,8 @@ namespace SmartWarehouse
                     : Name;
             }
         }
+
+        public Category() { }
 
         public Category(string name, Category parent = null)
         {

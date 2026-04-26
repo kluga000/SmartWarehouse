@@ -13,14 +13,6 @@ namespace SmartWarehouse
         public MainWindow()
         {
             InitializeComponent();
-
-            Category tech = new Category("Техніка");
-            Category laptops = new Category("Ноутбуки", tech);
-            Category microwaves = new Category("Мікрохвильовки", tech);
-
-            _productRepo.Add(new Product(1, "Lenovo Legion", "LNV-01", 45000, 5, laptops));
-            _productRepo.Add(new Product(2, "Xiaomi MWB010-2A", "XAO-02", 3399, 25, microwaves));
-
             RefreshTable();
             this.Title = $"SmartWarehouse - Користувач: {CurrentUser.Login}";
         }
@@ -47,33 +39,22 @@ namespace SmartWarehouse
             if (addWin.ShowDialog() == true)
             {
                 var newP = addWin.ResultProduct;
+                var existing = _productRepo.Find(p => p.Article == newP.Article).FirstOrDefault();
 
-                MessageBoxResult confirmAdd = MessageBox.Show(
-                    $"Ви впевнені, що хочете ДОДАТИ новий товар:\n\"{newP.Name}\" (Артикул: {newP.Article})?",
-                    "Підтвердження операції",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question,
-                    MessageBoxResult.No);
-
-                if (confirmAdd == MessageBoxResult.Yes)
+                if (existing != null)
                 {
-                    var existing = _productRepo.Find(p => p.Article == newP.Article).FirstOrDefault();
-
-                    if (existing != null)
-                    {
-                        existing.Quantity += newP.Quantity;
-                        existing.IsDeleted = false;
-                        MessageBox.Show("Кількість оновлена.");
-                    }
-                    else
-                    {
-                        int nextId = _productRepo.GetAll().Any() ? _productRepo.GetAll().Max(p => p.Id) + 1 : 1;
-                        var productToAdd = new Product(nextId, newP.Name, newP.Article, newP.Price, newP.Quantity, newP.Category);
-                        _productRepo.Add(productToAdd);
-                        MessageBox.Show("Новий товар додано.");
-                    }
-                    RefreshTable();
+                    existing.Quantity += newP.Quantity;
+                    existing.IsDeleted = false;
                 }
+                else
+                {
+                    int nextId = _productRepo.GetAll().Any() ? _productRepo.GetAll().Max(p => p.Id) + 1 : 1;
+                    var productToAdd = new Product(nextId, newP.Name, newP.Article, newP.Price, newP.Quantity, newP.Category);
+                    _productRepo.Add(productToAdd);
+                }
+
+                _productRepo.SaveChanges();
+                RefreshTable();
             }
         }
 
@@ -83,18 +64,9 @@ namespace SmartWarehouse
             {
                 if (int.TryParse(txtAmountChange.Text, out int amount) && amount > 0)
                 {
-                    MessageBoxResult result = MessageBox.Show(
-                        $"Ви впевнені, що хочете ДОДАТИ {amount} шт. до товару \"{selected.Name}\"?",
-                        "Підтвердження зміни залишку",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question,
-                        MessageBoxResult.No);
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        selected.AddQuantity(amount);
-                        RefreshTable();
-                    }
+                    selected.AddQuantity(amount);
+                    _productRepo.SaveChanges();
+                    RefreshTable();
                 }
                 else
                 {
@@ -115,18 +87,9 @@ namespace SmartWarehouse
                 {
                     if (selected.Quantity >= amount)
                     {
-                        MessageBoxResult result = MessageBox.Show(
-                            $"Ви впевнені, що хочете СПИСАТИ {amount} шт. з товару \"{selected.Name}\"?",
-                            "Підтвердження списання",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Warning,
-                            MessageBoxResult.No);
-
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            selected.Quantity -= amount;
-                            RefreshTable();
-                        }
+                        selected.Quantity -= amount;
+                        _productRepo.SaveChanges();
+                        RefreshTable();
                     }
                     else
                     {
@@ -164,6 +127,7 @@ namespace SmartWarehouse
                 if (result == MessageBoxResult.Yes)
                 {
                     selected.IsDeleted = true;
+                    _productRepo.SaveChanges();
                     RefreshTable();
                 }
             }
