@@ -1,0 +1,41 @@
+﻿<Window x:Class="SmartWarehouse.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Вхід у систему" Height="300" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Авторизація" 
+               FontSize="24" 
+               FontWeight="Bold" 
+               HorizontalAlignment="Center" 
+               Margin="0,0,0,20" 
+               Grid.Row="0"/>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,15">
+            <TextBlock Text="Логін:"/>
+            <TextBox x:Name="txtLogin" Height="30" VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,15">
+            <TextBlock Text="Пароль:"/>
+            <PasswordBox x:Name="txtPassword" Height="30" VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <Button Content="Увійти" 
+            Click="btnLogin_Click" 
+            Height="45" 
+            Width="200"
+            Background="#D1E7DD" 
+            FontSize="16" 
+            FontWeight="Bold" 
+            Grid.Row="4" 
+            HorizontalAlignment="Center"/>
+    </Grid>
+</Window>

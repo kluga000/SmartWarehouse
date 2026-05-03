@@ -5,6 +5,6 @@ namespace SmartWarehouse
     public enum UserRole
     {
         Admin,
-        Manager
+        User
     }
 }

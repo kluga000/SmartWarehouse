@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SmartWarehouse
 {
+    // Представляє користувача системи з механізмом безпечної автентифікації
     public class User
     {
         public string Login { get; set; }
@@ -17,6 +18,7 @@ namespace SmartWarehouse
             Role = role;
         }
 
+        // Перевіряє відповідність введеного пароля збереженому хешу
         public bool Authenticate(string password)
         {
             return PasswordHash == HashPassword(password);

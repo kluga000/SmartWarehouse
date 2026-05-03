@@ -2,6 +2,7 @@
 
 namespace SmartWarehouse
 {
+    // Клас Адміністратора, який наслідує базовий клас User
     public class Admin : User
     {
         public Admin(string login, string password)

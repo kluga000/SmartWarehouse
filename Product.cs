@@ -1,29 +1,53 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace SmartWarehouse
 {
-    public class Product
+    /// <summary>
+    /// Модель товару з підтримкою сповіщень про зміну властивостей (для UI)
+    /// </summary>
+    public class Product : INotifyPropertyChanged
     {
+        private int _quantity;
+        private bool _isDeleted;
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Назва товару обов'язкова")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Назва має бути від 2 до 100 символів")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Артикул обов'язковий")]
-        [RegularExpression(@"^[A-Za-z0-9-]+$", ErrorMessage = "Артикул може містити лише букви, цифри та дефіс")]
         public string Article { get; set; }
 
-        [Range(0.01, 1000000, ErrorMessage = "Ціна має бути більшою за нуль")]
+        // Використовується для фінансових розрахунків у звітах
         public double Price { get; set; }
 
-        [Range(0, 100000, ErrorMessage = "Кількість не може бути від'ємною")]
-        public int Quantity { get; set; }
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(); // Оновлює значення в DataGrid автоматично
+            }
+        }
 
         public Category Category { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
+        // Поле для реалізації механізму «м'якого видалення» без втрати даних
+        public bool IsDeleted
+        {
+            get => _isDeleted;
+            set
+            {
+                _isDeleted = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Порожній конструктор необхідний для коректної роботи JSON-десеріалізатора
+        public Product() { }
 
         public Product(int id, string name, string article, double price, int quantity, Category category)
         {
@@ -35,17 +59,17 @@ namespace SmartWarehouse
             Category = category;
         }
 
-        public string GetInfo()
-        {
-            string categoryName = Category != null ? Category.FullName : "Без категорії";
-            string status = IsDeleted ? " [АРХІВ]" : "";
-            return $"{Name}{status} [{categoryName}] (Артикул: {Article}) - Ціна: {Price}, Кількість: {Quantity}";
-        }
-
+        // Бізнес-логіка: безпечне поповнення залишків
         public void AddQuantity(int amount)
         {
-            if (amount > 0)
-                Quantity += amount;
+            if (amount > 0) Quantity += amount;
+        }
+
+        // Реалізація інтерфейсу INotifyPropertyChanged для зв'язку Моделі з Інтерфейсом (WPF Binding)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
